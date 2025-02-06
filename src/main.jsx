@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import Authentication, { PageType } from "./pages/Authentication.jsx";
 import React, { StrictMode } from "react";
+import AddEvent from "./pages/AddEvent.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Authentication pageType={PageType.REGISTER} />,
+  },
+  {
+    path: "/add-event",
+    element: <AddEvent />,
   },
 ]);
 
