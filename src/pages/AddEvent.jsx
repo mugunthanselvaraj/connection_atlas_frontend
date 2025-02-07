@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Datepicker from "react-tailwindcss-datepicker";
 import EditorToolbar, { formats, modules } from "../comonents/EditorToolbar";
 import Button from "../elements/Button";
+import { addEvent } from "../apis/events";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const initialErrorsState = {
   title: "",
@@ -13,6 +16,17 @@ const initialErrorsState = {
 };
 
 const AddEvent = () => {
+  const [cookies, setCookie] = useCookies([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("JWT", cookies.jwt)
+    if (!cookies.jwt) {
+      
+      navigate("/");
+    }
+  });
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState(initialErrorsState);
@@ -62,7 +76,41 @@ const AddEvent = () => {
       return;
     }
 
-    //TODO API call
+    addEventApi();
+  };
+
+  const addEventApi = async () => {
+    const [response, error] = await addEvent(cookies.jwt, {
+      event: {
+        title: title,
+        description: description,
+        start_time: datePick.startDate,
+        end_time: datePick.endDate,
+        location: "",
+      },
+    });
+    handleResponse([response, error]);
+  };
+
+  const handleResponse = async ([response, error]) => {
+    if (error) {
+      let result;
+      if (error.message) {
+        result = await error.message;
+      } else {
+        result = await error.text();
+      }
+      setErrors({
+        ...errors,
+        api: result,
+      });
+    } else {
+      console.log(response)
+      const result = await response;
+      const message = result.message;
+      console.log(message);
+      navigate("/");
+    }
   };
   return (
     <div className="bg-white">

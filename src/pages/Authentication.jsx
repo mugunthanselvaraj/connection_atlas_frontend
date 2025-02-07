@@ -95,7 +95,8 @@ const Authentication = ({ pageType }) => {
         api: result,
       });
     } else {
-      const result = await response.json();
+      //const result = await response.json();
+      const result = await response;
       const jwt = response.headers.get("authorization");
       setCookie("jwt", jwt);
 

@@ -1,6 +1,5 @@
 import { DOMAIN } from "./config";
 export const registerApi = async (bodyObject) => {
-  // Set up options for the fetch request
   const requestOptions = {
     method: "POST",
     headers: {
@@ -45,8 +44,6 @@ export const loginApi = async (bodyObject) => {
     } else {
       return ["", response];
     }
-    //console.log("Response:", response.errors);
-    //const errorMessage = await response.message;
   } catch (error) {
     console.error("Error", error);
     return ["", error];
